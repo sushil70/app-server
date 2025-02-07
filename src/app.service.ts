@@ -3,6 +3,14 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    return 'Welcome to App';
+  }
+
+  login() {
+    return 'Login';
+  }
+
+  register() {
+    return 'Register';
   }
 }
