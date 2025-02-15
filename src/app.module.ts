@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+// import { typeOrmConfig } from './typeorm.config';
 
 @Module({
   imports: [
@@ -12,7 +13,10 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    // TypeOrmModule.forRootAsync(typeOrmConfig),
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule], // Ensure ConfigModule is imported if using ConfigService
+      inject: [ConfigService], // Inject ConfigService to get values from .env or other sources
       useFactory: () => ({
         type: process.env.DB_TYPE as any,
         host: process.env.DB_HOST,

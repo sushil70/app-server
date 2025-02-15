@@ -4,8 +4,8 @@ import {
   Body,
   UseGuards,
   Get,
-  UnauthorizedException,
   Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -30,8 +30,14 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('profile')
+  @Get('token-profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(AuthGuard('jwtie'))
+  @Post('refresh')
+  async refreshToken(@Body() body: { userId: string; refreshToken: string }) {
+    return this.authService.refreshToken(+body.userId, body.refreshToken);
   }
 }

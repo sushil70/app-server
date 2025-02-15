@@ -26,4 +26,8 @@ export class UserService {
     const newUser = this.userRepository.create(user);
     return this.userRepository.save(newUser);
   }
+
+  async setRefreshToken(userId: number, refreshToken: string): Promise<void> {
+    await this.userRepository.update(userId, { refreshToken });
+  }
 }

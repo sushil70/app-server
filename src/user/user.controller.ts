@@ -13,6 +13,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() user: Partial<User>): Promise<User> {
     return this.userService.create(user);
