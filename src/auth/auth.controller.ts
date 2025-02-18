@@ -6,6 +6,7 @@ import {
   Get,
   Request,
   UnauthorizedException,
+  HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -18,11 +19,11 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: { email: string; password: string }) {
     if (!body.email || !body.password) {
-      throw new UnauthorizedException('Email and password are required');
+      throw new HttpException('Email and password are required', 400);
     }
     const user = await this.authService.getUser(body.email);
     if (user) {
-      throw new UnauthorizedException('User already exists');
+      throw new HttpException('User already exists', 400);
     }
     return this.authService.register(body.email, body.password);
   }
@@ -30,7 +31,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     if (!body.email || !body.password) {
-      throw new UnauthorizedException('Email and password are required');
+      throw new HttpException('Email and password are required', 400);
     }
     const user = await this.authService.validateUser(body.email, body.password);
     if (!user) {
