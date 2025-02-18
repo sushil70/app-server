@@ -53,4 +53,8 @@ export class AuthService {
   private generateRefreshToken(): string {
     return uuidv4();
   }
+
+  async getUser(email: string) {
+    return this.userService.findByEmail(email);
+  }
 }

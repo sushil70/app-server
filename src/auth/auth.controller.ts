@@ -17,11 +17,21 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: { email: string; password: string }) {
+    if (!body.email || !body.password) {
+      throw new UnauthorizedException('Email and password are required');
+    }
+    const user = await this.authService.getUser(body.email);
+    if (user) {
+      throw new UnauthorizedException('User already exists');
+    }
     return this.authService.register(body.email, body.password);
   }
 
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
+    if (!body.email || !body.password) {
+      throw new UnauthorizedException('Email and password are required');
+    }
     const user = await this.authService.validateUser(body.email, body.password);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
